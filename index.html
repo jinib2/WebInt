@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang = "en">
+<html>
+  <head>
+    <meta charset = "UTF-8>
+    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
+    <meta name= "viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Event Timeline</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script src="./script.js"></script>
+  </head>
+  <body>
+  <section>
+	<nav class="flex-div">
+    <div class="nav-left">
+        <img src="https://drive.google.com/uc?export=view&id=1xbtSiWwpkMsYOEM5jMysPmoH6052Lvxn" style="width:85px;height:85px;">
+    </div>
+    <div class="nav-middle flex-div">
+        <div class="search-box flex-div">
+            <input id="search" type="search" placeholder="Search events, location..." onchange="">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Search_Icon.svg/768px-Search_Icon.svg.png" style="width:17px;height:17px">
+        </div>
+    </div>
+    <div class="nav-right flex-div">
+	    <input class="initi" id="initials" type="text" name="" placeholder="JB">
+        <img class="login" data-modal-target="#modal" src="https://www.logolynx.com/images/logolynx/4b/4beebce89d681837ba2f4105ce43afac.png" style="width:30px;height:30px;">	
+		
+    </div>
+    </nav><br>
+  </section>
+	
+	<div class="sidebar">
+    <h4 class="rightbar"></h4>
+      <button class="btn active" onclick="filterSelection('all')"> All</button>
+      <button class="btn" onclick="filterSelection('political')"> Political</button>
+      <button class="btn" onclick="filterSelection('cultural')"> Cultural</button>
+      <button class="btn" onclick="filterSelection('economic')"> Economic</button>
+      <button class="btn" onclick="filterSelection('military')"> Military</button>
+    </div>
+	<div class="gmap" id="map"></div><br>
+	
+	
+	
+    <div class="slidercontainer">
+	   <input id="myRange" class="slider" list="years" type="range" value="0" step="10.0" data-highlight="false" />
+	   <datalist id="years">
+          <option value="0" label="Oldest"></option>
+          <option value="10" label="1000BC"></option>
+          <option value="20" label="700BC"></option>
+          <option value="30" label="300BC"></option>
+          <option value="40" label="100AD"></option>
+          <option value="50" label="500AD"></option>
+          <option value="60" label="1000AD"></option>
+          <option value="70" label="1500AD"></option>
+          <option value="80" label="2000AD"></option>
+          <option value="90" label="2010"></option>
+          <option value="100" label="Today"></option>
+       </datalist>
+    </div>
+	
+	
+	    
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYRTteaReubQqnMmI8CC_rdiRTymnUTgc&callback=initMap&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
