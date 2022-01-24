@@ -11,6 +11,7 @@
     margin-left: 0.5%;
 	height: 110%;
 	overflow-y:auto;
+	background-color: #F2F4F4;
 }
 
 html,
@@ -24,6 +25,9 @@ body {
 .flex-div {
     display: flex;
     align-items: center;
+	background-color: #c40b0b;
+	color: white;
+	margin: 0;
 }
 
 nav {
@@ -36,17 +40,21 @@ nav {
     z-index: 10;
 }
 
-.nav-middle .search-box {
+
+.search-box {
     border: 1px solid #c40b0b;
     margin-right: 15px;
     padding: 2% 5% 1%;
-    border-radius: 25px;
+    border-radius: 10px;
+	background: white;
+	margin-left:4%;
+	
 }
 
-.nav-middle .search-box input {
+.search-box input {
     border: 0;
     outline: 0;
-    background: transparent;
+    background: white;
     font-size: 1vw;
     padding-right: 20px;
 }
@@ -91,6 +99,14 @@ nav {
         font-size: 9px;
     }
 }
+
+.filters{
+	background-color: #FADBD8;
+	margin-top: 3%;
+	margin-bottom: 3%;
+	padding:2%;
+}
+
 
 .custom-map-control-button {
     background-color: #fff;
@@ -174,8 +190,9 @@ datalist {
     display: inline-block;
     cursor: pointer;
     border-radius: 2px;
-    width: 50%;
+    width: 98%;
     margin-top: 3%;
+	align-items: center;
 }
 
 
