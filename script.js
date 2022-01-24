@@ -206,8 +206,49 @@ function addEventonMap(event) {
 }
 
 
+
+var index = [];
+var timeIndex = [];
+var filterIndex = [];
+var searchIndex = [];
+var type = "all";
+var time = "-2000";
+for(let i = 0; i < obj.events.length; i++){
+	timeIndex.push(1);
+	filterIndex.push(1);
+	searchIndex.push(1);
+}
+
+function filterSearch(){
+	var input = document.getElementById("search1").value;
+	var resource = document.getElementById("eventclass");
+	var result = "<table border = '1'>";
+	num = 0;
+	for(let i = 0; i < obj.events.length; i++){
+		timeIndex[i] = 1;
+		filterIndex[i] = 1;
+		searchIndex[i] = 1;
+		var item = obj.events[i].category + obj.events[i].name +obj.events[i].year + obj.events[i].place + obj.events[i].info;
+		if(item.includes(String(input))){
+			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
+			num += 1;
+			searchIndex[i] = 1;
+		}
+		else{
+			timeIndex[i] = 0;
+			filterIndex[i] = 0;
+			searchIndex[i] = 0;
+		}
+	}
+	if(num != 0){
+		resource.innerHTML = result;
+	}
+	else {
+		resource.innerHTML = "<h2>No matched result!</h2>";
+	}
+}
+
 function timeFilterChange() {
-	console.log("here");
 	var input = document.getElementById("myRange").value;
 	if(input == 100){
 		input = 2022;
@@ -218,14 +259,16 @@ function timeFilterChange() {
 	else{
 		input = 50*input - 2000;
 	}
-	var resource = document.getElementById("tevent");
+	time = input;
+	var resource = document.getElementById("eventclass");
 	var result = "<table border = '1'>";
-	result += "<tr><td>Event</td><td>Year</td><td>Location</td><td>Summary</td></tr>";
+	
 	if(input == -2000){
 		num = 0;
 		for(let i = 0; i < obj.events.length; i++){
-			if(obj.events[i].year < -1500){ 
-				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+			timeIndex[i] = 1;
+			if(filterIndex[i] == 1 && searchIndex[i] == 1){ 
+				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
 				num += 1;
 			}
 		}
@@ -240,9 +283,16 @@ function timeFilterChange() {
 		num = 0;
 		for(let i = 0; i < obj.events.length; i++){
 			console.log(obj.events[i].year);
-			if(obj.events[i].year > 2012){ 
-				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+			if(obj.events[i].year > 2012 && filterIndex[i] == 1 && searchIndex[i] == 1){ 
+				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
 				num += 1;
+				timeIndex[i] = 1;
+			}
+			else if(obj.events[i].year <= 2012){
+				timeIndex[i] = 0;
+			}
+			else {
+				timeIndex[i] = 1;
 			}
 		}
 		if(num != 0){
@@ -256,9 +306,16 @@ function timeFilterChange() {
 		num = 0;
 		for(let i = 0; i < obj.events.length; i++){
 			
-			if(obj.events[i].year < Number(input) + 500 && obj.events[i].year >= input  ){ 
-				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+			if(obj.events[i].year < Number(input) + 500 && obj.events[i].year >= input && filterIndex[i] == 1 && searchIndex[i] == 1){ 
+				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
 				num += 1;
+				timeIndex[i] = 1;
+			}
+			else if(obj.events[i].year >= Number(input) + 500 || obj.events[i].year < input){
+				timeIndex[i] = 0;
+			}
+			else {
+				timeIndex[i] = 1;
 			}
 		}
 		if(num != 0){
@@ -268,58 +325,29 @@ function timeFilterChange() {
 			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
 		}
 	}
-}
-
-
-var index = [];
-function filterSearch(){
-	var input = document.getElementById("search1").value;
-	var resource = document.getElementById("eventclass");
-	var result = "<table border = '1'>";
-	index = [];
-	num = 0;
-	for(let i = 0; i < obj.events.length; i++){
-		var item = obj.events[i].category + obj.events[i].name +obj.events[i].year + obj.events[i].place + obj.events[i].info;
-		if(item.includes(String(input))){
-			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
-			num += 1;
-			index.push(1);
-			console.log(i);
-		}
-		else {
-			index.push(0);
-		}
-	}
-	if(num != 0){
-		resource.innerHTML = result;
-	}
-	else {
-		resource.innerHTML = "<h2>No matched result!</h2>";
-	}
+	
+	
 }
 
 function filterSelection(etype){
-	console.log(index);
-	var input = document.getElementById("search1").value;
 	var resource = document.getElementById("eventclass");
 	var result = "<table border = '1'>";
 	num = 0;
-	if(input == ""){
-		for(let i = 0; i < obj.events.length; i++){
-			if(obj.events[i].category == etype || etype == "all"){
-				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
-				num += 1;
-			}
+	type = etype;
+	for(let i = 0; i < obj.events.length; i++){
+		if(timeIndex[i] == 1 && (obj.events[i].category == etype || etype == "all") && searchIndex[i] == 1){
+			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
+			num += 1;
+			filterIndex[i] = 1;
+		}
+		else if(obj.events[i].category != etype && etype != "all"){
+			filterIndex[i] = 0;
+		}
+		else {
+			filterIndex[i] = 1;
 		}
 	}
-	else {
-		for(let i = 0; i < obj.events.length; i++){
-			if(index[i]!=0 && (obj.events[i].category == etype || etype == "all")){
-				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
-				num += 1;
-			}
-		}
-	}
+	
 	if(num != 0){
 		resource.innerHTML = result;
 	}
