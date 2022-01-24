@@ -6,11 +6,11 @@ let map, infoWindow;
 
 //our databas - if year is negative means BC if positive AD
 let entry = '{"events": [' +
-    '{ "category": "war", "name": "Antibes War", "year": 1200, "lon": 7.127606575482881, "lat": 43.59003047304352, "place": "Antibes", "info": "The war took place from 12-10-1200 until 12-12-1200. It was agains the cameloeons and the witches" },' +
-    '{ "category": "political", "name": "Antibes vote for indipendece", "year": 1400, "lon": 7.125733056505457, "lat": 43.58299201293525, "place": "Antibes", "info": "The population voted for indipendence from Italy on 23-12-1400 and won" },' +
-    '{ "category": "cultural", "name": "Canne filmfestival", "year": 1993, "lon": 7.018106040448357, "lat": 43.55076284479385, "place": "Cannes", "info": "The first time in history in the Cannes Film festival took place" },' +
-    '{ "category": "economy", "name": "No more flowers", "year": 1998, "lon": 7.107458046755829, "lat": 43.619316719287994, "place": "Biot", "info": "After decates of cultivationg flowers, the last flower man gave up his business" },' +
-    '{ "category": "war", "name": "Biot war", "year": -300, "lon": 7.063503689307342, "lat": 43.630619063890514, "place": "Biot", "info": "The war took place in 300 BC . It was agains the parrots and the dwarfts" }' +
+'{ "category": "war", "name": "Biot war", "year": -300, "place": "Biot", "lon": 7.063503689307342, "lat": 43.630619063890514, "info": "The war took place in 300 BC . It was against the parrots and the dwarves" },' +
+    '{ "category": "war", "name": "Antibes War", "year": 1200, "place": "Antibes", "lon": 7.127606575482881, "lat": 43.59003047304352, "info": "The war took place from 12-10-1200 until 12-12-1200. It was against the cameloeons and the witches" },' +
+    '{ "category": "political", "name": "Antibes vote for independence", "year": 1400, "place": "Antibes", "lon": 7.125733056505457, "lat": 43.58299201293525, "info": "The population voted for independence from Italy on 23-12-1400 and won" },' +
+    '{ "category": "cultural", "name": "Canne filmfestival", "year": 1993, "place": "Cannes", "lon": 7.018106040448357, "lat": 43.55076284479385, "info": "The first Cannes Film festival took place" },' +
+    '{ "category": "economy", "name": "No more flowers", "year": 1998, "place": "Biot", "lon": 7.107458046755829, "lat": 43.619316719287994, "info": "After decades of cultivating flowers, the last flower man gave up his business" }' +
     ']}'
 let obj = JSON.parse(entry);
 
@@ -23,7 +23,7 @@ let war, economy, political, cultural;
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: -34.397, lng: 150.644 },
-        zoom: 6
+        zoom: 2
     });
     infoWindow = new google.maps.InfoWindow();
 
@@ -46,7 +46,7 @@ function initMap() {
                     infoWindow.setContent("you are here.");
                     infoWindow.open(map);
                     map.setCenter(pos);
-                    map.setZoom(12);
+                    map.setZoom(11.5);
 
                 },
                 () => {
@@ -67,7 +67,7 @@ function initMap() {
         fillOpacity: 0.9,
         strokeWeight: 0,
         rotation: 0,
-        scale: 2,
+        scale: 1,
         anchor: new google.maps.Point(15, 30),
     };
     economy = {
@@ -76,7 +76,7 @@ function initMap() {
         fillOpacity: 1,
         strokeWeight: 0,
         rotation: 0,
-        scale: 2,
+        scale: 1,
         anchor: new google.maps.Point(15, 30),
     };
     political = {
@@ -85,7 +85,7 @@ function initMap() {
         fillOpacity: 1,
         strokeWeight: 0,
         rotation: 0,
-        scale: 0.07,
+        scale: 0.05,
         anchor: new google.maps.Point(15, 30),
 
     }
@@ -95,7 +95,7 @@ function initMap() {
         fillOpacity: 1,
         strokeWeight: 0,
         rotation: 0,
-        scale: 0.07,
+        scale: 0.05,
         anchor: new google.maps.Point(15, 30),
 
     }
@@ -149,6 +149,9 @@ function addMarker(location, map, name, type) {
         title: name,
         map: map,
         icon: type
+		//icon: {type,
+		//  size: new google.maps.Size(5, 5),
+		//  scaledSize: new google.maps.Size(4, 4)}
     });
 
     return marker;
@@ -200,4 +203,127 @@ function addEventonMap(event) {
     });
 
 
+}
+
+
+function timeFilterChange() {
+	console.log("here");
+	var input = document.getElementById("myRange").value;
+	if(input == 100){
+		input = 2022;
+	}
+	else if(input == 90){
+		input = 2010;
+	}
+	else{
+		input = 50*input - 2000;
+	}
+	var resource = document.getElementById("tevent");
+	var result = "<table border = '1'>";
+	result += "<tr><td>Event</td><td>Year</td><td>Location</td><td>Summary</td></tr>";
+	if(input == -2000){
+		num = 0;
+		for(let i = 0; i < obj.events.length; i++){
+			if(obj.events[i].year < -1500){ 
+				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+				num += 1;
+			}
+		}
+		if(num != 0){
+			resource.innerHTML = result;
+		}
+		else {
+			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+		}
+	}
+	else if(input == 2022){
+		num = 0;
+		for(let i = 0; i < obj.events.length; i++){
+			console.log(obj.events[i].year);
+			if(obj.events[i].year > 2012){ 
+				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+				num += 1;
+			}
+		}
+		if(num != 0){
+			resource.innerHTML = result;
+		}
+		else {
+			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+		}
+	}
+	else {
+		num = 0;
+		for(let i = 0; i < obj.events.length; i++){
+			
+			if(obj.events[i].year < Number(input) + 500 && obj.events[i].year >= input  ){ 
+				result += "<tr><td>"+obj.events[i].name+"</td><td>"+obj.events[i].year+"</td><td>"+obj.events[i].place+"</td><td>"+obj.events[i].info+"</td></tr>";
+				num += 1;
+			}
+		}
+		if(num != 0){
+			resource.innerHTML = result;
+		}
+		else {
+			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+		}
+	}
+}
+
+
+var index = [];
+function filterSearch(){
+	var input = document.getElementById("search1").value;
+	var resource = document.getElementById("eventclass");
+	var result = "<table border = '1'>";
+	index = [];
+	num = 0;
+	for(let i = 0; i < obj.events.length; i++){
+		var item = obj.events[i].category + obj.events[i].name +obj.events[i].year + obj.events[i].place + obj.events[i].info;
+		if(item.includes(String(input))){
+			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
+			num += 1;
+			index.push(1);
+			console.log(i);
+		}
+		else {
+			index.push(0);
+		}
+	}
+	if(num != 0){
+		resource.innerHTML = result;
+	}
+	else {
+		resource.innerHTML = "<h2>No matched result!</h2>";
+	}
+}
+
+function filterSelection(etype){
+	console.log(index);
+	var input = document.getElementById("search1").value;
+	var resource = document.getElementById("eventclass");
+	var result = "<table border = '1'>";
+	num = 0;
+	if(input == ""){
+		for(let i = 0; i < obj.events.length; i++){
+			if(obj.events[i].category == etype || etype == "all"){
+				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
+				num += 1;
+			}
+		}
+	}
+	else {
+		for(let i = 0; i < obj.events.length; i++){
+			if(index[i]!=0 && (obj.events[i].category == etype || etype == "all")){
+				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
+				num += 1;
+			}
+		}
+	}
+	if(num != 0){
+		resource.innerHTML = result;
+	}
+	else {
+		resource.innerHTML = "<h2>No matched result!</h2>";
+	}
 }
