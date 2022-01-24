@@ -6,14 +6,17 @@ let map, infoWindow;
 
 //our databas - if year is negative means BC if positive AD
 let entry = '{"events": [' +
-'{ "category": "war", "name": "Biot war", "year": -300, "place": "Biot", "lon": 7.063503689307342, "lat": 43.630619063890514, "info": "The war took place in 300 BC . It was against the parrots and the dwarves" },' +
-    '{ "category": "war", "name": "Antibes War", "year": 1200, "place": "Antibes", "lon": 7.127606575482881, "lat": 43.59003047304352, "info": "The war took place from 12-10-1200 until 12-12-1200. It was against the cameloeons and the witches" },' +
-    '{ "category": "political", "name": "Antibes vote for independence", "year": 1400, "place": "Antibes", "lon": 7.125733056505457, "lat": 43.58299201293525, "info": "The population voted for independence from Italy on 23-12-1400 and won" },' +
+    '{ "category": "war", "name": "Biot war", "year": -300, "place": "Biot", "lon": 7.063503689307342, "lat": 43.630619063890514, "info": "The war took place in 300 BC . It was against the parrots and the dwarves" },' +
+    '{ "category": "war", "name": "Antibes War", "year": -1500, "place": "Antibes", "lon": 7.127606575482881, "lat": 43.59003047304352, "info": "The war took place on the beach of Antibes. It was the 3rd war of witches against giants" },' +
+    '{ "category": "political", "name": "Antibes vote for independence", "year": 1547, "place": "Antibes", "lon": 7.125733056505457, "lat": 43.58299201293525, "info": "The population voted for independence from Italy and won" },' +
     '{ "category": "cultural", "name": "Canne filmfestival", "year": 1993, "place": "Cannes", "lon": 7.018106040448357, "lat": 43.55076284479385, "info": "The first Cannes Film festival took place" },' +
-    '{ "category": "economy", "name": "No more flowers", "year": 1998, "place": "Biot", "lon": 7.107458046755829, "lat": 43.619316719287994, "info": "After decades of cultivating flowers, the last flower man gave up his business" }' +
+    '{ "category": "economy", "name": "No more flowers", "year": 1998, "place": "Biot", "lon": 7.107458046755829, "lat": 43.619316719287994, "info": "After decades of cultivating flowers, the last flower man gave up his business" },' +
+    '{ "category": "economy", "name": "The Tourist", "year": 1970, "place": "Antibes", "lon": 7.115484007155366, "lat": 43.58897954602113, "info": "After being a agricultural region for some time, Antibes became a hotspot for Tourists and Yachts" },' +
+    '{ "category": "war", "name": "Arrival of the Ottomans", "year": 1543, "place": "Antibes", "lon": 7.1257330565054568, "lat": 43.55076284479389, "info": "He then raided the coasts of Sicily and Southern Italy through the month of June, anchoring in front of Rome at the mouth of the Tiber on 29 June, while Polin wrote reassurances that attacks against Rome would not take place. Barbarossa arrived with his fleet, accompanied by the French Ambassador Polin, at Île Saint-Honorat on 5 July. As almost nothing had been prepared on the French side to assist the Ottoman fleet, Polin was dispatched to meet with Francis I at Marolles and ask him for support.[8] Meanwhile, Barbarossa went to the harbour of Toulon on 10 July and then was received with honours at the harbour of Marseille on 21 July, where he joined the French forces under the Governor of Marseille, François, Count of Enghien" },' +
+    '{ "category": "political", "name": "My new castle", "year": 1320, "place": "Biot", "lon": 7.10745804675523, "lat": 43.619316719287940, "info": "Thanks to its Natural shelterd position, Biot became Commandery of the Knights of Malta" }' +
     ']}'
 let obj = JSON.parse(entry);
-
+let markers = [];
 
 //alert(obj.events[0].info);
 
@@ -149,9 +152,9 @@ function addMarker(location, map, name, type) {
         title: name,
         map: map,
         icon: type
-		//icon: {type,
-		//  size: new google.maps.Size(5, 5),
-		//  scaledSize: new google.maps.Size(4, 4)}
+            //icon: {type,
+            //  size: new google.maps.Size(5, 5),
+            //  scaledSize: new google.maps.Size(4, 4)}
     });
 
     return marker;
@@ -160,11 +163,16 @@ function addMarker(location, map, name, type) {
 
 function addEventonMap(event) {
     //create Textbox content
+    if (event.year > 0) {
+        x = "AD"
+    } else {
+        x = "BC"
+    }
     const contentString =
         '<div id="content">' +
         '<div id="siteNotice">' +
         "</div>" +
-        '<h1 id="firstHeading" class="firstHeading">' + event.name + '</h1><h3>' + "   " + event.year + "</h3>" +
+        '<h1 id="firstHeading" class="firstHeading">' + event.name + '</h1><h3>' + "   " + Math.abs(event.year) + " " + x + "</h3>" +
         '<div id="bodyContent">' +
         "<p>" + event.info + "</p>" +
         "</div>" +
@@ -202,156 +210,199 @@ function addEventonMap(event) {
 
     });
 
+    markers.push(mark);
+}
 
+function hideMarkers() {
+    console.log("i should hide now");
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+}
+
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
 }
 
 
-
-var index = [];
 var timeIndex = [];
 var filterIndex = [];
 var searchIndex = [];
-var type = "all";
-var time = "-2000";
-for(let i = 0; i < obj.events.length; i++){
-	timeIndex.push(1);
-	filterIndex.push(1);
-	searchIndex.push(1);
+for (let i = 0; i < obj.events.length; i++) {
+    timeIndex.push(1);
+    filterIndex.push(1);
+    searchIndex.push(1);
 }
 
-function filterSearch(){
-	var input = document.getElementById("search1").value;
-	var resource = document.getElementById("eventclass");
-	var result = "<table border = '1'>";
-	num = 0;
-	for(let i = 0; i < obj.events.length; i++){
-		timeIndex[i] = 1;
-		filterIndex[i] = 1;
-		searchIndex[i] = 1;
-		var item = obj.events[i].category + obj.events[i].name +obj.events[i].year + obj.events[i].place + obj.events[i].info;
-		if(item.includes(String(input))){
-			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
-			num += 1;
-			searchIndex[i] = 1;
-		}
-		else{
-			timeIndex[i] = 0;
-			filterIndex[i] = 0;
-			searchIndex[i] = 0;
-		}
-	}
-	if(num != 0){
-		resource.innerHTML = result;
-	}
-	else {
-		resource.innerHTML = "<h2>No matched result!</h2>";
-	}
+function filterSearch() {
+    var input = document.getElementById("search1").value;
+    var resource = document.getElementById("eventclass");
+    var result = "<table border = '1'>";
+    var res = [];
+    num = 0;
+    hideMarkers();
+    for (let i = 0; i < obj.events.length; i++) {
+        timeIndex[i] = 1;
+        filterIndex[i] = 1;
+        searchIndex[i] = 1;
+        var item = obj.events[i].category + obj.events[i].name + obj.events[i].year + obj.events[i].place + obj.events[i].info;
+        if (item.includes(String(input))) {
+            if (event.year > 0) {
+                x = "AD"
+            } else {
+                x = "BC"
+            }
+            result += "<tr><h3>" + obj.events[i].name + "</h3>Year :" + Math.abs(obj.events[i].year) + " " + x + "</br></br>Location: " + obj.events[i].place + "</br></br>Summary: " + obj.events[i].info + "</br></br></tr>";
+            res[num] = obj.events[i];
+            num += 1;
+            searchIndex[i] = 1;
+        } else {
+            timeIndex[i] = 0;
+            filterIndex[i] = 0;
+            searchIndex[i] = 0;
+        }
+    }
+    if (num != 0) {
+        resource.innerHTML = result;
+        for (let i = 0; i < res.length; i++) {
+            addEventonMap(res[i]);
+        }
+    } else {
+        resource.innerHTML = "<h2>No matched result!</h2>";
+    }
 }
 
 function timeFilterChange() {
-	var input = document.getElementById("myRange").value;
-	if(input == 100){
-		input = 2022;
-	}
-	else if(input == 90){
-		input = 2010;
-	}
-	else{
-		input = 50*input - 2000;
-	}
-	time = input;
-	var resource = document.getElementById("eventclass");
-	var result = "<table border = '1'>";
-	
-	if(input == -2000){
-		num = 0;
-		for(let i = 0; i < obj.events.length; i++){
-			timeIndex[i] = 1;
-			if(filterIndex[i] == 1 && searchIndex[i] == 1){ 
-				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
-				num += 1;
-			}
-		}
-		if(num != 0){
-			resource.innerHTML = result;
-		}
-		else {
-			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
-		}
-	}
-	else if(input == 2022){
-		num = 0;
-		for(let i = 0; i < obj.events.length; i++){
-			console.log(obj.events[i].year);
-			if(obj.events[i].year > 2012 && filterIndex[i] == 1 && searchIndex[i] == 1){ 
-				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
-				num += 1;
-				timeIndex[i] = 1;
-			}
-			else if(obj.events[i].year <= 2012){
-				timeIndex[i] = 0;
-			}
-			else {
-				timeIndex[i] = 1;
-			}
-		}
-		if(num != 0){
-			resource.innerHTML = result;
-		}
-		else {
-			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
-		}
-	}
-	else {
-		num = 0;
-		for(let i = 0; i < obj.events.length; i++){
-			
-			if(obj.events[i].year < Number(input) + 500 && obj.events[i].year >= input && filterIndex[i] == 1 && searchIndex[i] == 1){ 
-				result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>";
-				num += 1;
-				timeIndex[i] = 1;
-			}
-			else if(obj.events[i].year >= Number(input) + 500 || obj.events[i].year < input){
-				timeIndex[i] = 0;
-			}
-			else {
-				timeIndex[i] = 1;
-			}
-		}
-		if(num != 0){
-			resource.innerHTML = result;
-		}
-		else {
-			resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
-		}
-	}
-	
-	
+    hideMarkers();
+    var input = document.getElementById("myRange").value;
+    if (input == 100) {
+        input = 2022;
+    } else if (input == 90) {
+        input = 2010;
+    } else {
+        input = 50 * input - 2000;
+    }
+    time = input;
+    var resource = document.getElementById("eventclass");
+    var result = "<table border = '1'>";
+    var res = [];
+
+    if (input == -2000) {
+        num = 0;
+        for (let i = 0; i < obj.events.length; i++) {
+            timeIndex[i] = 1;
+            if (filterIndex[i] == 1 && searchIndex[i] == 1) {
+                if (obj.events[i].year > 0) {
+                    x = "AD"
+                } else {
+                    x = "BC"
+                }
+                result += "<tr><h3>" + obj.events[i].name + "</h3>Year :" + Math.abs(obj.events[i].year) + " " + x + "</br></br>Location: " + obj.events[i].place + "</br></br>Summary: " + obj.events[i].info + "</br></br></tr>";
+                res[num] = obj.events[i];
+                num += 1;
+            }
+        }
+        if (num != 0) {
+            resource.innerHTML = result;
+            for (let i = 0; i < res.length; i++) {
+                addEventonMap(res[i]);
+            }
+        } else {
+            resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+        }
+    } else if (input == 2022) {
+        num = 0;
+        for (let i = 0; i < obj.events.length; i++) {
+            console.log(obj.events[i].year);
+            if (obj.events[i].year > 2012 && filterIndex[i] == 1 && searchIndex[i] == 1) {
+                if (obj.events[i].year > 0) {
+                    x = "AD"
+                } else {
+                    x = "BC"
+                }
+                result += "<tr><h3>" + obj.events[i].name + "</h3>Year :" + Math.abs(obj.events[i].year) + " " + x + "</br></br>Location: " + obj.events[i].place + "</br></br>Summary: " + obj.events[i].info + "</br></br></tr>";
+                res[num] = obj.events[i];
+                num += 1;
+                timeIndex[i] = 1;
+            } else if (obj.events[i].year <= 2012) {
+                timeIndex[i] = 0;
+            } else {
+                timeIndex[i] = 1;
+            }
+        }
+        if (num != 0) {
+            resource.innerHTML = result;
+            for (let i = 0; i < res.length; i++) {
+                addEventonMap(res[i]);
+            }
+        } else {
+            resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+        }
+    } else {
+        num = 0;
+        for (let i = 0; i < obj.events.length; i++) {
+
+            if (obj.events[i].year < Number(input) + 500 && obj.events[i].year >= input && filterIndex[i] == 1 && searchIndex[i] == 1) {
+                if (obj.events[i].year > 0) {
+                    x = "AD"
+                } else {
+                    x = "BC"
+                }
+                result += "<tr><h3>" + obj.events[i].name + "</h3>Year :" + Math.abs(obj.events[i].year) + " " + x + "</br></br>Location: " + obj.events[i].place + "</br></br>Summary: " + obj.events[i].info + "</br></br></tr>";
+                res[num] = obj.events[i];
+                num += 1;
+                timeIndex[i] = 1;
+            } else if (obj.events[i].year >= Number(input) + 500 || obj.events[i].year < input) {
+                timeIndex[i] = 0;
+            } else {
+                timeIndex[i] = 1;
+            }
+        }
+        if (num != 0) {
+            resource.innerHTML = result;
+            for (let i = 0; i < res.length; i++) {
+                addEventonMap(res[i]);
+            }
+        } else {
+            resource.innerHTML = "<h2>Nothing happened around this time...</h2>";
+        }
+    }
+
+
 }
 
-function filterSelection(etype){
-	var resource = document.getElementById("eventclass");
-	var result = "<table border = '1'>";
-	num = 0;
-	type = etype;
-	for(let i = 0; i < obj.events.length; i++){
-		if(timeIndex[i] == 1 && (obj.events[i].category == etype || etype == "all") && searchIndex[i] == 1){
-			result += "<tr><h3>"+obj.events[i].name+"</h3>Year :"+obj.events[i].year+"</br></br>Location: "+obj.events[i].place+"</br></br>Summary: "+obj.events[i].info+"</br></br></tr>"; 
-			num += 1;
-			filterIndex[i] = 1;
-		}
-		else if(obj.events[i].category != etype && etype != "all"){
-			filterIndex[i] = 0;
-		}
-		else {
-			filterIndex[i] = 1;
-		}
-	}
-	
-	if(num != 0){
-		resource.innerHTML = result;
-	}
-	else {
-		resource.innerHTML = "<h2>No matched result!</h2>";
-	}
+function filterSelection(etype) {
+    hideMarkers();
+    var resource = document.getElementById("eventclass");
+    var result = "<table border = '1'>";
+    var res = [];
+    num = 0;
+    for (let i = 0; i < obj.events.length; i++) {
+        if (timeIndex[i] == 1 && (obj.events[i].category == etype || etype == "all") && searchIndex[i] == 1) {
+            if (obj.events[i].year > 0) {
+                x = "AD"
+            } else {
+                x = "BC"
+            }
+            result += "<tr><h3>" + obj.events[i].name + "</h3>Year :" + Math.abs(obj.events[i].year) + " " + x + "</br></br>Location: " + obj.events[i].place + "</br></br>Summary: " + obj.events[i].info + "</br></br></tr>";
+            res[num] = obj.events[i];
+            num += 1;
+            filterIndex[i] = 1;
+        } else if (obj.events[i].category != etype && etype != "all") {
+            filterIndex[i] = 0;
+        } else {
+            filterIndex[i] = 1;
+        }
+    }
+
+    if (num != 0) {
+        resource.innerHTML = result;
+        for (let i = 0; i < res.length; i++) {
+            addEventonMap(res[i]);
+        }
+    } else {
+        resource.innerHTML = "<h2>No matched result!</h2>";
+    }
 }
