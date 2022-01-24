@@ -14,17 +14,14 @@
   <section>
 	<nav class="flex-div">
     <div class="nav-left">
-        <img src="https://drive.google.com/uc?export=view&id=1xbtSiWwpkMsYOEM5jMysPmoH6052Lvxn" style="width:85px;height:85px;">
+        <img src="https://drive.google.com/uc?export=view&id=182FpjKkfX0OtXUxjVpGudNXBk7d3j3hL" style="width:85px;height:85px;">
     </div>
     
 	<div class="nav-middle flex-div">
 	    <h2>World Event Timeline</h2>
 	</div>
 	
-    <div class="nav-right flex-div">
-	    <input class="initi" id="initials" type="text" name="" placeholder="JB">
-        <img class="login" data-modal-target="#modal" src="https://www.logolynx.com/images/logolynx/4b/4beebce89d681837ba2f4105ce43afac.png" style="width:30px;height:30px;">	
-		
+    <div class="nav-right flex-div">	
     </div>
     </nav><br>
   </section>
@@ -34,13 +31,15 @@
 	  
 	  <div class="search-box flex-div">
             <input id="search1" type="search" placeholder="Search events, location..." name="q" onchange="filterSearch()"></br>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Search_Icon.svg/768px-Search_Icon.svg.png" style="width:17px;height:17px">
+            <img src="https://www.freeiconspng.com/thumbs/search-icon-png/search-icon-png-21.png" style="width:17px;height:17px">
       </div>
+      <div class="filters">
       <button class="btn active" onclick="filterSelection('all')"> All</button><br>
       <button class="btn" onclick="filterSelection('political')"> Political</button><br>
       <button class="btn" onclick="filterSelection('cultural')"> Cultural</button><br>
       <button class="btn" onclick="filterSelection('economy')"> Economic</button><br>
       <button class="btn" onclick="filterSelection('war')"> Military</button><br>
+	  </div>
 	  <table id="eventclass"></table>
     </div>
 	
