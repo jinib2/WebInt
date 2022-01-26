@@ -5,6 +5,12 @@
     margin-right: 5%;
 }
 
+@media screen and (max-width: 600px) {
+    #map {
+		width: 64%;
+    }
+}
+
 .sidebar {
     float: right;
     width: 20%;
@@ -13,6 +19,14 @@
 	overflow-y:auto;
 	background-color: #F2F4F4;
 }
+
+@media screen and (max-width: 600px) {
+    div.sidebar {
+        font-size: 12px;
+		width: 35%;
+    }
+}
+
 
 html,
 body {
@@ -54,11 +68,17 @@ nav {
 .search-box input {
     border: 0;
     outline: 0;
-    background: white;
-    font-size: 1vw;
+    background: none;
+    font-size: 11px;
     padding-right: 20px;
 }
 
+
+@media screen and (max-width: 600px) {
+    div.search-box {
+        font-size: 7px;
+    }
+}
 
 /*
  * for all the things in the right of the top bar
@@ -96,7 +116,7 @@ nav {
 
 @media screen and (max-width: 600px) {
     div.nav-right .initi input {
-        font-size: 9px;
+        font-size: 12px;
     }
 }
 
@@ -125,60 +145,44 @@ nav {
     background: #ebebeb;
 }
 
-.slidecontainer {
-    width: 95%;
-    /* Width of the outside container */
-}
-
-
-/* Mouse-over effects */
-
-.slider:hover {
-    opacity: 1;
-    /* Fully shown on mouse-over */
-}
-
-
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 
 .slider {
-    -webkit-appearance: none;
-    width: 95%;
-    height: 15px;
-    border-radius: 5px;
-    background: #fadbd8;
-    outline: none;
-    opacity: 0.9;
-    -webkit-transition: 0.2s;
-    transition: opacity 0.2s;
+  -webkit-appearance: none;
+  width: 99%;
+  height: 14px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
 }
 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 1.5%;
-    height: auto;
-    padding-top: 1.5%;
-    border-radius: 50%;
-    background: #c40b0b;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%; 
+  background: #c40b0b;
+  cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-    width: 2%;
-    height: auto;
-    padding-top: 2%;
-    border-radius: 50%;
-    background: #c40b0b;
-    cursor: pointer;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #c40b0b;
+  cursor: pointer;
 }
+
 
 datalist {
     display: flex;
     justify-content: space-between;
-    width: 95%;
+    width: 99%;
     font-family: "Times New Roman", Times, serif;
-    font-size: 1vw;
+    font-size: 1.5vw;
 }
 
 .btn {
