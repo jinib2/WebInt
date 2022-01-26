@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang = "en">
-<html>
-  <head>
-    <meta charset = "UTF-8>
-    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
-    <meta name= "viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Event Timeline</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <link rel="stylesheet" type="text/css" href="./style.css" />
-    <script src="./script.js"></script>
-  </head>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="script.js" defer></script>
+    	<link href="style.css" rel="stylesheet" />
+	<title>Document</title>
+</head>
   <body>
-  <section>
+  <div>
 	<nav class="flex-div">
     <div class="nav-left">
-        <img src="https://drive.google.com/uc?export=view&id=182FpjKkfX0OtXUxjVpGudNXBk7d3j3hL" style="width:85px;height:85px;">
+        <img src="https://drive.google.com/uc?export=view&id=182FpjKkfX0OtXUxjVpGudNXBk7d3j3hL" alt="Logo" style="width:85px;height:85px;">
     </div>
     
 	<div class="nav-middle flex-div">
@@ -24,13 +22,13 @@
     <div class="nav-right flex-div">	
     </div>
     </nav><br>
-  </section>
+  </div>
 	
-	<div class="sidebar">
-    <h4 class="rightbar"></h4>
+	<div class="sidebar rightbar">
+   
 	  
 	  <div class="search-box flex-div">
-            <input id="search1" type="search" placeholder="Search events, location..." name="q" onchange="filterSearch()"></br>
+            <input id="search1" type="search" placeholder="Search events, location..." name="q" onchange="filterSearch()"><br>
       </div>
       <div class="filters">
       <button class="btn active" onclick="filterSelection('all')"> All</button><br>
